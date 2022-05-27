@@ -12,8 +12,8 @@ public class ShopServiceTest {
     //Sample products
     Product plumbus = new Product("Plumbus");
     Product lappenLauch  = new Product("LappenLauch");
-    Product lappen = new Product("Lappen");
-    Product lauch = new Product("Lauch");
+    Product lappen = new Product("Apfel");
+    Product lauch = new Product("");
 
     @Test
     public void shouldListProducts() {

@@ -1,13 +1,13 @@
 package com.example;
 
-import java.util.UUID;
+import java.util.*;
 
-public class Product {
+public class fruit implements products {
     private String name;
     private final String id = UUID.randomUUID().toString();
 
 
-    Product(String name) {
+    fruit(String name) {
         this.name = name;
     }
     public String getId() {
