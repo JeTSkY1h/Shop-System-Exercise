@@ -1,10 +1,11 @@
 package com.example;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.*;
-
+import org.assertj.core.api.*;
 
 import org.junit.Test;
 
@@ -187,15 +188,9 @@ public class ShopServiceTest {
         OrderRepo orderRepo = new OrderRepo(orders);
         ShopService shopService = new ShopService(productRepo, orderRepo);
         
-        boolean thrown = false;
-        //then
-        try {
-            shopService.addOrder(orderToAdd);
-        } catch (Exception e) {
-            thrown = true;
-        }
-
-        assertTrue(thrown);
-
+        Assertions.assertThatExceptionOfType(RuntimeException.class)
+            .isThrownBy(()->shopService.addOrder(orderToAdd))
+            .withMessage("Mindestens ein bestelltes Produkt gibt es nicht.");
     }
+
 }
