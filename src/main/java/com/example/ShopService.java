@@ -33,7 +33,7 @@ public class ShopService {
         productKeys.removeAll(this.listProducts().keySet());
         System.out.println(productKeys);
         if (productKeys.size() > 0) {
-            throw new RuntimeException("Mindestens ein bestelltes Product gibt es nicht.");
+            throw new RuntimeException("Mindestens ein bestelltes Produkt gibt es nicht.");
         }
         orderRepo.add(order);
     }

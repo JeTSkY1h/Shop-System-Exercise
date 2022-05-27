@@ -1,21 +1,10 @@
 package com.example;
 
-import java.util.*;
+public interface Product {
 
-public class Product {
+    public String getName();
+
     
-    private String name;
-    private final String id = UUID.randomUUID().toString();
 
-    Product(String name) {
-        this.name = name;
-    }
-
-    public String getName(){
-        return this.name;
-    }
-
-    public String getId(){
-        return this.id;
-    }
+    public String getId();
 }
