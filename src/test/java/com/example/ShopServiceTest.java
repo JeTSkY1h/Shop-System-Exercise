@@ -1,196 +1,91 @@
 package com.example;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
-import java.util.*;
-import org.assertj.core.api.*;
+import java.util.List;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
+
+
 
 public class ShopServiceTest {
     //Sample products
     Product plumbus = new Product("Plumbus");
     Product lappenLauch  = new Product("LappenLauch");
-    Product lappen = new Product("Apfel");
-    Product lauch = new Product("");
+    Product apfel = new Product("Apfel");
+    Product wasser = new Product("Wasser");
+    Product bier = new  Product("Bier");
+    Order order = new Order(List.of(apfel,wasser));
+
+
+    private ShopService buildShop() {
+        
+        ProductRepo productRepo = new ProductRepo(List.of(plumbus, lappenLauch, apfel, wasser, bier));
+        
+        OrderRepo orderRepo = new OrderRepo(List.of(order));
+        ShopService shopService = new ShopService(productRepo,orderRepo);
+
+        return shopService;
+
+    }
 
     @Test
     public void shouldListProducts() {
-        //given
-        HashMap<String, Product> orderList = new HashMap<>();
-        orderList.put(plumbus.getId(),plumbus);
-        orderList.put(lappenLauch.getId(),lappenLauch);
-        Order order = new Order(orderList);
-
-        HashMap<String, Order> orders = new HashMap<>();
-        orders.put(order.getId(), order);
-
-        HashMap<String, Product> products = new HashMap<>();
-        products.put(plumbus.getId(), plumbus);
-        products.put(lappenLauch.getId(), lappenLauch);
-        products.put(lappen.getId(), lappen);
-        products.put(lauch.getId(), lauch);
-
-        ProductRepo productRepo = new ProductRepo(products);
-        OrderRepo orderRepo = new OrderRepo(orders);
-        ShopService shopService = new ShopService(productRepo, orderRepo);
-
-        //then1
-        HashMap<String, Product> res = shopService.listProducts();
-        //when
-        assertEquals(products, res);
-        
-
+        ShopService shopService = buildShop();
+        List<Product> res  = shopService.listProducts();
+        assertThat(res).containsAll(List.of(plumbus,lappenLauch,apfel,wasser,bier));
     }
 
     @Test
     public void shouldGetProduct() {
-        //given
-        HashMap<String, Product> orderList = new HashMap<>();
-        orderList.put(plumbus.getId(),plumbus);
-        orderList.put(lappenLauch.getId(),lappenLauch);
-        Order order = new Order(orderList);
-
-        HashMap<String, Order> orders = new HashMap<>();
-        orders.put(order.getId(), order);
-
-        HashMap<String, Product> products = new HashMap<>();
-        products.put(plumbus.getId(), plumbus);
-        products.put(lappenLauch.getId(), lappenLauch);
-        products.put(lappen.getId(), lappen);
-        products.put(lauch.getId(), lauch);
-
-        ProductRepo productRepo = new ProductRepo(products);
-        OrderRepo orderRepo = new OrderRepo(orders);
-        ShopService shopService = new ShopService(productRepo, orderRepo);
-
-        //then
+        ShopService shopService = buildShop();
         Product res = shopService.getProduct(plumbus.getId());
 
-        assertEquals(plumbus.getId(), res.getId());
+        assertThat(res).isEqualTo(plumbus);
     }
 
     @Test
     public void shouldListOrders() {
-        //given
-        HashMap<String, Product> orderList = new HashMap<>();
-        orderList.put(plumbus.getId(),plumbus);
-        orderList.put(lappenLauch.getId(),lappenLauch);
-        Order order = new Order(orderList);
+        ShopService shopService = buildShop();
 
-        HashMap<String, Order> orders = new HashMap<>();
-        orders.put(order.getId(), order);
-        HashMap<String, Product> products = new HashMap<>();
-        products.put(plumbus.getId(), plumbus);
-        products.put(lappenLauch.getId(), lappenLauch);
-        products.put(lappen.getId(), lappen);
-        products.put(lauch.getId(), lauch);
+        List<Order> res = shopService.listOrders();
 
-        ProductRepo productRepo = new ProductRepo(products);
-        OrderRepo orderRepo = new OrderRepo(orders);
-        ShopService shopService = new ShopService(productRepo, orderRepo);
-
-        //then
-        HashMap<String, Order> res = shopService.listOrders();
-
-        assertEquals(res, orders);
+        assertThat(res).containsAll(List.of(order));
     }
 
     @Test
     public void shouldAddOrder() {
-        //given
-        HashMap<String, Product> orderList = new HashMap<>();
-        HashMap<String, Product> orderList2 = new HashMap<>();
-        orderList.put(plumbus.getId(),plumbus);
-        orderList.put(lappenLauch.getId(),lappenLauch);
-        Order order = new Order(orderList);
-        orderList2.put(lauch.getId(),lauch);
-        orderList2.put(lappen.getId(),lappen);
-        Order orderToAdd = new Order(orderList2);
+        ShopService shopService = buildShop();
 
-        HashMap<String, Order> orders = new HashMap<>();
-        orders.put(order.getId(), order);
-
-        HashMap<String, Product> products = new HashMap<>();
-        products.put(plumbus.getId(), plumbus);
-        products.put(lappenLauch.getId(), lappenLauch);
-        products.put(lappen.getId(), lappen);
-        products.put(lauch.getId(), lauch);
-
-        ProductRepo productRepo = new ProductRepo(products);
-        OrderRepo orderRepo = new OrderRepo(orders);
-        ShopService shopService = new ShopService(productRepo, orderRepo);
-
-        //then
+        Order orderToAdd = new Order(List.of(wasser, apfel, bier));
         shopService.addOrder(orderToAdd);
-        HashMap<String,Order> expected = new HashMap<>();
-        expected.put(order.getId(),order);
-        expected.put(orderToAdd.getId(),orderToAdd);
-
-        assertEquals(expected, shopService.listOrders());
-
+        List<Order> res = shopService.listOrders();
+        assertThat(res).containsAll(List.of(order, orderToAdd));
     }
 
     @Test
     public void shouldGetOrder() {
-        //given
-        HashMap<String, Product> orderList = new HashMap<>();
-        orderList.put(plumbus.getId(),plumbus);
-        orderList.put(lappenLauch.getId(),lappenLauch);
-        Order order = new Order(orderList);
-
-        HashMap<String, Order> orders = new HashMap<>();
-        orders.put(order.getId(), order);
-
-        HashMap<String, Product> products = new HashMap<>();
-        products.put(plumbus.getId(), plumbus);
-        products.put(lappenLauch.getId(), lappenLauch);
-        products.put(lappen.getId(), lappen);
-        products.put(lauch.getId(), lauch);
-
-        ProductRepo productRepo = new ProductRepo(products);
-        OrderRepo orderRepo = new OrderRepo(orders);
-        ShopService shopService = new ShopService(productRepo, orderRepo);
-
-        //then
+        ShopService shopService = buildShop();
 
         Order res = shopService.getOrder(order.getId());
 
-        assertEquals(order, res);
+        assertEquals(res, order);
+
     }
 
     @Test
     public void shouldThrowExceptionCauseOrderedProductIsNotInRepo() {
-        //given
-        HashMap<String, Product> orderList2 = new HashMap<>();
-        orderList2.put(plumbus.getId(),plumbus);
-        orderList2.put(lappenLauch.getId(),lappenLauch);
-        orderList2.put(lauch.getId(),lauch);
-        orderList2.put(lappen.getId(),lappen);
+        ShopService shopService = buildShop();
+        Product test = new Product("test");
 
-        Order orderToAdd = new Order(orderList2);
-        HashMap<String, Product> orderList = new HashMap<>();
-        orderList.put(plumbus.getId(),plumbus);
-        orderList.put(lappenLauch.getId(),lappenLauch);
-        Order order = new Order(orderList);
-
-        HashMap<String, Order> orders = new HashMap<>();
-        orders.put(order.getId(), order);
-        
-        HashMap<String, Product> products = new HashMap<>();
-        products.put(plumbus.getId(), plumbus);
-        products.put(lappenLauch.getId(), lappenLauch);
-        products.put(lauch.getId(), lauch);
-        
-        ProductRepo productRepo = new ProductRepo(products);
-        OrderRepo orderRepo = new OrderRepo(orders);
-        ShopService shopService = new ShopService(productRepo, orderRepo);
-        
-        Assertions.assertThatExceptionOfType(RuntimeException.class)
-            .isThrownBy(()->shopService.addOrder(orderToAdd))
-            .withMessage("Mindestens ein bestelltes Produkt gibt es nicht.");
+        Order orderToAdd = new Order(List.of(wasser,test));
+        assertThatExceptionOfType(RuntimeException.class).isThrownBy(()-> {
+                shopService.addOrder(orderToAdd);
+            }
+        );
     }
 
 }

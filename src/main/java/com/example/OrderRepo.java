@@ -3,14 +3,16 @@ package com.example;
 import java.util.*;
 
 public class OrderRepo {
-    private HashMap<String, Order> orders = new HashMap<>();
+    private Map<String, Order> orders = new HashMap<>();
 
-    OrderRepo(HashMap<String, Order> orders) {
-        this.orders = orders;
+    OrderRepo(List<Order> orders) {
+        for (Order order : orders) {
+            this.orders.put(order.getId(),order);            
+        }
     }
 
-    public HashMap<String, Order> list() {
-        return orders;
+    public List<Order> list() {
+        return orders.values().stream().toList();
     }
 
     public Order get(String id) {

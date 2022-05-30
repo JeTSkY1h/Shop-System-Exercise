@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.*;
 
+
 /**
  * Hello world!
  *
@@ -16,24 +17,21 @@ public class ShopService {
     }
 
     Product getProduct(String id) {
-        return productRepo.get(id);
+        if(!productRepo.get(id).isPresent()) throw new RuntimeException("Ein Produkt mit der ID " + id + " Existiert nicht im Repo." );
+        return productRepo.get(id).get();
     }
 
-    HashMap<String, Product> listProducts(){
+    List<Product> listProducts(){
         return this.productRepo.list();
     }
 
-    HashMap<String, Order> listOrders(){
+    List<Order> listOrders(){
         return orderRepo.list();
-    }
+    }    
 
     void addOrder(Order order) {
-        HashSet<String> productKeys = new HashSet<>(this.listProducts().keySet());
-        productKeys.addAll(order.listProducts().keySet());
-        productKeys.removeAll(this.listProducts().keySet());
-        System.out.println(productKeys);
-        if (productKeys.size() > 0) {
-            throw new RuntimeException("Mindestens ein bestelltes Produkt gibt es nicht.");
+        for (Product product: order.listProducts())   {
+            this.getProduct(product.getId());
         }
         orderRepo.add(order);
     }
