@@ -88,4 +88,13 @@ public class ShopServiceTest {
         );
     }
 
+    @Test 
+    public void shouldGetProductByName(){
+        ShopService shopService = buildShop();
+
+        Product res = shopService.getProductByName("Bier");
+
+        assertThat(res).isEqualTo(bier);
+
+    }
 }

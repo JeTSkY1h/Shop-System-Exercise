@@ -1,14 +1,14 @@
 package com.example;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderRepo {
     private Map<String, Order> orders = new HashMap<>();
 
     OrderRepo(List<Order> orders) {
-        for (Order order : orders) {
-            this.orders.put(order.getId(),order);            
-        }
+        this.orders = orders.stream()
+            .collect(Collectors.toMap(order->order.getId(), order -> order));
     }
 
     public List<Order> list() {

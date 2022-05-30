@@ -16,6 +16,14 @@ public class ShopService {
         this.orderRepo = orderRepo;
     }
 
+    Product getProductByName(String name){
+        Optional<Product> res = productRepo.list().stream()
+            .filter(p->p.getName().equals(name))
+            .findFirst();
+        if(!res.isPresent()) throw new RuntimeException("Ein Produkt mit dem Namem " + name + " Existiert nicht.");
+        return res.get();
+    }
+
     Product getProduct(String id) {
         if(!productRepo.get(id).isPresent()) throw new RuntimeException("Ein Produkt mit der ID " + id + " Existiert nicht im Repo." );
         return productRepo.get(id).get();
@@ -30,9 +38,9 @@ public class ShopService {
     }    
 
     void addOrder(Order order) {
-        for (Product product: order.listProducts())   {
-            this.getProduct(product.getId());
-        }
+        order.listProducts().stream()
+            .map(p -> this.getProduct(p.getId()))
+            .toList();
         orderRepo.add(order);
     }
 
