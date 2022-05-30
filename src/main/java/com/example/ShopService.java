@@ -2,11 +2,6 @@ package com.example;
 
 import java.util.*;
 
-
-/**
- * Hello world!
- *
- */
 public class ShopService {
     private ProductRepo productRepo;
     private OrderRepo orderRepo;
@@ -20,7 +15,7 @@ public class ShopService {
         Optional<Product> res = productRepo.list().stream()
             .filter(p->p.getName().equals(name))
             .findFirst();
-        if(!res.isPresent()) throw new RuntimeException("Ein Produkt mit dem Namem " + name + " Existiert nicht.");
+        if(res.isEmpty()) throw new RuntimeException("Ein Produkt mit dem Namem " + name + " Existiert nicht.");
         return res.get();
     }
 

@@ -2,14 +2,9 @@ package com.example;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
-
-
 
 public class ShopServiceTest {
     //Sample products
@@ -35,7 +30,9 @@ public class ShopServiceTest {
     @Test
     public void shouldListProducts() {
         ShopService shopService = buildShop();
+
         List<Product> res  = shopService.listProducts();
+        
         assertThat(res).containsAll(List.of(plumbus,lappenLauch,apfel,wasser,bier));
     }
 

@@ -8,7 +8,7 @@ public class ProductRepo {
 
     ProductRepo(List<Product> productsList) {
         this.products = productsList.stream()
-        .collect(Collectors.toMap(p -> p.getId(), p -> p));
+        .collect(Collectors.toMap(product -> product.getId(), product -> product));
     }
 
     public List<Product> list(){
