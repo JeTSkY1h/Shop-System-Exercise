@@ -2,10 +2,6 @@ package com.example;
 
 import java.util.*;
 
-/**
- * Hello world!
- *
- */
 public class ShopService {
     private ProductRepo productRepo;
     private OrderRepo orderRepo;
@@ -15,26 +11,31 @@ public class ShopService {
         this.orderRepo = orderRepo;
     }
 
-    Product getProduct(String id) {
-        return productRepo.get(id);
+    Product getProductByName(String name){
+        Optional<Product> res = productRepo.list().stream()
+            .filter(p->p.getName().equals(name))
+            .findFirst();
+        if(res.isEmpty()) throw new RuntimeException("Ein Produkt mit dem Namem " + name + " Existiert nicht.");
+        return res.get();
     }
 
-    HashMap<String, Product> listProducts(){
+    Product getProduct(String id) {
+        if(!productRepo.get(id).isPresent()) throw new RuntimeException("Ein Produkt mit der ID " + id + " Existiert nicht im Repo." );
+        return productRepo.get(id).get();
+    }
+
+    List<Product> listProducts(){
         return this.productRepo.list();
     }
 
-    HashMap<String, Order> listOrders(){
+    List<Order> listOrders(){
         return orderRepo.list();
-    }
+    }    
 
     void addOrder(Order order) {
-        HashSet<String> productKeys = new HashSet<>(this.listProducts().keySet());
-        productKeys.addAll(order.listProducts().keySet());
-        productKeys.removeAll(this.listProducts().keySet());
-        System.out.println(productKeys);
-        if (productKeys.size() > 0) {
-            throw new RuntimeException("Mindestens ein bestelltes Product gibt es nicht.");
-        }
+        order.listProducts().stream()
+            .map(p -> this.getProduct(p.getId()))
+            .toList();
         orderRepo.add(order);
     }
 

@@ -4,13 +4,13 @@ import java.util.*;
 
 public class Order {
     private final String id = UUID.randomUUID().toString();
-    private HashMap<String, Product> products;
+    private List<Product> products;
 
-    Order(HashMap<String, Product> products) {
+    Order(List<Product> products) {
         this.products = products;
     }
 
-    public HashMap<String, Product> listProducts() {
+    public List<Product> listProducts() {
         return this.products;
     }
 

@@ -1,20 +1,23 @@
 package com.example;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductRepo {
-    private HashMap<String, Product> products = new HashMap<>();
+    private Map<String, Product> products = new HashMap<>();
 
-    ProductRepo(HashMap<String, Product> products) {
-        this.products = products;
+    ProductRepo(List<Product> productsList) {
+        this.products = productsList.stream()
+        .collect(Collectors.toMap(product -> product.getId(), product -> product));
     }
 
-    public HashMap<String, Product> list(){
-        return this.products;
+    public List<Product> list(){
+        return this.products.values().stream().toList();
     }
 
-    public Product get(String id){
-        return products.get(id);
+    public Optional<Product> get(String id){
+        return Optional.ofNullable(products.get(id));
+
     }
 
 }

@@ -2,12 +2,12 @@ package com.example;
 
 import java.util.UUID;
 
-public class Product {
+public class thing {
     private String name;
     private final String id = UUID.randomUUID().toString();
 
 
-    Product(String name) {
+    thing(String name) {
         this.name = name;
     }
     public String getId() {
@@ -18,3 +18,4 @@ public class Product {
         return this.name;
     }
 }
+
